@@ -48,6 +48,8 @@ jobs:
 
       - name: Configure Maven with Artifactory
         run: |
+          echo $JF_URL
+          echo "$JF_URL"
           jf mvnc \
             --server-id-resolve $JF_URL \
             --repo-resolve-releases mwpc-maven \
