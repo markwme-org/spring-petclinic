@@ -51,7 +51,7 @@ jobs:
           echo $JF_URL
           echo "$JF_URL"
           jf mvnc \
-            --server-id-resolve $JF_URL \
+            --server-id-resolve https://solengeu.jfrog.io \
             --repo-resolve-releases mwpc-maven \
             --repo-resolve-snapshots mwpc-maven \
             --use-wrapper
