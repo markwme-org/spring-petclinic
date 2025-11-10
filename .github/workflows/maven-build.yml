@@ -45,8 +45,10 @@ jobs:
         with:
           java-version: ${{matrix.java}}
           distribution: 'temurin'
-          cache: maven
 
+      - name: Clear Maven cache
+        run: rm -rf ~/.m2/repository
+          
       - name: Configure Maven with Artifactory
         run: |
           echo $JF_URL
