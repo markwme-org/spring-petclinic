@@ -49,7 +49,7 @@ jobs:
       - name: Configure Maven with Artifactory
         run: |
           jf mvnc \
-            --server-id-resolve solengeu \
+            --server-id-resolve $JF_URL \
             --repo-resolve-releases mwpc-maven \
             --repo-resolve-snapshots mwpc-maven \
             --use-wrapper
