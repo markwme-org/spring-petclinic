@@ -51,8 +51,6 @@ jobs:
           
       - name: Configure Maven with Artifactory
         run: |
-          echo $JF_URL
-          echo "idk $JF_URL"
           jf mvnc \
             --server-id-resolve solengeu \
             --repo-resolve-releases mwpc-maven \
@@ -63,7 +61,7 @@ jobs:
         run: cat ~/.m2/settings.xml                   
 
       - name: Build with Maven
-        run: jf mvn -B verify --build-name=petclinic --build-number=${{ github.run_number }}
+        run: ./mvnw -s $HOME/.m2/settings.xml -B verify
       
       - name: Publish build info
         run: jf rt build-publish petclinic ${{ github.run_number }}
