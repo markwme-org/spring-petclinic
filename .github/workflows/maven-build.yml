@@ -12,19 +12,48 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      security-events: write
     strategy:
       matrix:
         java: [ '25' ]
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup JFrog CLI
+        # You may pin to the exact commit or the version.
+        # uses: jfrog/setup-jfrog-cli@5b06f730cc5a6f55d78b30753f8583454b08c0aa
+        uses: jfrog/setup-jfrog-cli@v4.8.1
+        env:
+          JF_URL: ${{vars.JF_URL}}
+        with:
+          # Provider Name's value that was set in OpenId Connect integration in the JFrog platform.
+          oidc-provider-name: ${{vars.JF_OIDC_PROVIDER_NAME}}
+          # By default, this is the URL of the GitHub repository owner, such as the organization that owns the repository.
+          oidc-audience: ${{vars.JF_OIDC_AUDIENCE}}
+      - run: |
+          jf -v
+          jf rt ping
+
       - name: Set up JDK ${{matrix.java}}
         uses: actions/setup-java@v4
         with:
           java-version: ${{matrix.java}}
           distribution: 'adopt'
           cache: maven
-      - name: Build with Maven Wrapper
-        run: ./mvnw -B verify
+
+      - name: Configure Maven with Artifactory
+        run: |
+          --server-id-resolve=solengeu
+          --server-id-deploy=solengeu
+          --use-wrapper
+
+      - name: Build with Maven
+        run: jf mvn clean install --build-name=petclinic --build-number=${{ github.run_number }}
+      
+      - name: Publish build info
+        run: jf rt build-publish petclinic ${{ github.run_number }}
