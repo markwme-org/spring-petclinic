@@ -35,6 +35,7 @@ jobs:
           oidc-provider-name: ${{vars.JF_OIDC_PROVIDER_NAME}}
           # By default, this is the URL of the GitHub repository owner, such as the organization that owns the repository.
           oidc-audience: ${{vars.JF_OIDC_AUDIENCE}}
+          custom-server-id: solengeu
       - run: |
           jf -v
           jf rt ping
@@ -49,9 +50,9 @@ jobs:
       - name: Configure Maven with Artifactory
         run: |
           echo $JF_URL
-          echo "$JF_URL"
+          echo "idk $JF_URL"
           jf mvnc \
-            --server-id-resolve https://solengeu.jfrog.io \
+            --server-id-resolve solengeu \
             --repo-resolve-releases mwpc-maven \
             --repo-resolve-snapshots mwpc-maven \
             --use-wrapper
