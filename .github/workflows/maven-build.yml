@@ -45,10 +45,7 @@ jobs:
         with:
           java-version: ${{matrix.java}}
           distribution: 'temurin'
-
-      - name: Clear Maven cache
-        run: rm -rf ~/.m2/repository
-          
+         
       - name: Configure Maven with Artifactory
         run: |
           jf mvnc \
@@ -57,11 +54,10 @@ jobs:
             --repo-resolve-snapshots mwpc-maven \
             --use-wrapper
             
-      - name: Show Maven settings
-        run: cat ~/.m2/settings.xml                   
-
       - name: Build with Maven
-        run: ./mvnw -s $HOME/.m2/settings.xml -B verify
+        run: jf mvn -B verify --build-name=petclinic --build-number=${{ github.run_number }}
+        env:
+          MAVEN_OPTS: "--add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED"
       
       - name: Publish build info
         run: jf rt build-publish petclinic ${{ github.run_number }}
