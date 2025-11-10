@@ -19,7 +19,7 @@ jobs:
       security-events: write
     strategy:
       matrix:
-        java: [ '25' ]
+        java: [ '17, 21' ]
 
     steps:
       - uses: actions/checkout@v4
@@ -44,7 +44,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{matrix.java}}
-          distribution: 'adopt'
+          distribution: 'temurin'
           cache: maven
 
       - name: Configure Maven with Artifactory
