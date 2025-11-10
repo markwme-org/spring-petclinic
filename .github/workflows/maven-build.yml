@@ -56,12 +56,9 @@ jobs:
             --repo-resolve-releases mwpc-maven \
             --repo-resolve-snapshots mwpc-maven \
             --use-wrapper
-            
-      - name: Clear local Maven cache
-        run: rm -rf ~/.m2/repository
-        
+                   
       - name: Build with Maven
-        run: jf mvn clean install --build-name=petclinic --build-number=${{ github.run_number }}
+        run: jf mvn -B verify --build-name=petclinic --build-number=${{ github.run_number }}
       
       - name: Publish build info
         run: jf rt build-publish petclinic ${{ github.run_number }}
